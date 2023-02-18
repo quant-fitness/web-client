@@ -6,6 +6,6 @@ import '@testing-library/jest-dom';
 describe('/', () => {
 	it('shows a heading', () => {
 		render(Page);
-		expect(screen.getByRole('heading', { name: 'Welcome to SvelteKit' })).toBeInTheDocument();
+		expect(screen.getByRole('heading', { name: 'Internal' })).toBeInTheDocument();
 	});
 });
