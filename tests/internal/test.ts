@@ -8,5 +8,6 @@ test('index page has expected h1', async ({ page }) => {
 test('index page links to the health checks page', async ({ page }) => {
 	await page.goto('/internal');
 	await page.getByRole('link', { name: 'Health Checks' }).click();
-	await expect(page.url()).toMatch(/\/internal\/health-checks$/);
+	await page.getByText('Internal - Health Checks').isVisible();
+	await expect(page.getByText('Internal - Health Checks')).toBeVisible();
 });
