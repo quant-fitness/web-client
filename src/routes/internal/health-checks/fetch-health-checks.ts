@@ -14,7 +14,7 @@ const checkWebClientHealthBody = async (response: Response): Promise<HealthStatu
 
 const fetchWebClientHealth = async (fetch: any): Promise<HealthCheckResponse> => {
 	try {
-		const healthCheckResponse = await fetch('/internal/health-checks');
+		const healthCheckResponse = await fetch('/internal/health-checks/web-client');
 
 		if (!healthCheckResponse.ok) {
 			return { ...initialHealthCheckStatuses, webClientCheck: 'responded-with-an-error' };
