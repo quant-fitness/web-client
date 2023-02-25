@@ -10,21 +10,40 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.7.0]
+    services:
+      postgres:
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+        image: postgres:15
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: '.tool-versions'
           cache: 'npm'
       - run: npm ci
       - run: npx playwright install
       - run: npm run check
       - run: npm run lint
       - run: npm run test:unit
-      - run: npm test
       - run: npm run build
+      - uses: actions/checkout@v3
+        with:
+          repository: 'quant-fitness/api'
+          path: 'api'
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          working-directory: api
+      - run: |
+          cd api
+          ./bin/rails db:create
+          ./bin/rails db:migrate
+          ./bin/rails server &
+      - run: npm test
