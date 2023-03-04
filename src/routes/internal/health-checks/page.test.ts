@@ -1,7 +1,7 @@
 import Page from './+page.svelte';
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/svelte';
-import type { HealthCheckResponse } from './health-check-response';
+import type { HealthCheckResponse } from '$lib/health-check-response';
 import '@testing-library/jest-dom';
 
 describe('/internal/health-checks', () => {

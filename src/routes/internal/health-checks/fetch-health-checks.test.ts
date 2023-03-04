@@ -1,5 +1,5 @@
 import { fetchHealthChecks } from './fetch-health-checks';
-import type { HealthCheckResponse } from './health-check-response';
+import type { HealthCheckResponse } from '$lib/health-check-response';
 import { describe, it, expect, vi } from 'vitest';
 
 describe('fetchHealthChecks', () => {

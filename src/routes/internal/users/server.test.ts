@@ -5,9 +5,9 @@ import {
 	createUser,
 	type ApiErrorResponse,
 	type CreateUserResponse
-} from './create-user';
+} from '$lib/server/internal/users/create-user';
 
-vi.mock('./create-user');
+vi.mock('$lib/server/internal/users/create-user');
 
 const createUserMock = createUser as unknown as Mock;
 const isErrorResponseBodyMock = isErrorResponseBody as unknown as Mock;

@@ -1,4 +1,4 @@
-import type { HealthStatus } from '../health-check-response';
+import type { HealthStatus } from '$lib/health-check-response';
 import { API_BASE_URL } from '$env/static/private';
 
 const checkApiHealthBody = async (response: Response): Promise<HealthStatus> =>

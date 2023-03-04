@@ -1,5 +1,9 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
-import { createUser, isErrorResponseBody, type CreateUserResponse } from './create-user';
+import {
+	createUser,
+	isErrorResponseBody,
+	type CreateUserResponse
+} from '$lib/server/internal/users/create-user';
 
 export const POST: RequestHandler = async ({ fetch, request }) => {
 	const { user } = await request.json();
