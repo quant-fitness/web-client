@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { HealthCheckResponse, HealthStatus } from './health-check-response';
+	import type { HealthCheckResponse, HealthStatus } from '$lib/health-check-response';
 
 	export let data: HealthCheckResponse | undefined;
 

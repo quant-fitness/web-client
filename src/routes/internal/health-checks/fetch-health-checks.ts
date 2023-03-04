@@ -1,4 +1,4 @@
-import type { HealthCheckResponse, HealthStatus } from './health-check-response';
+import type { HealthCheckResponse, HealthStatus } from '$lib/health-check-response';
 
 const initialHealthCheckStatuses: HealthCheckResponse = {
 	webClientCheck: 'skipped',
