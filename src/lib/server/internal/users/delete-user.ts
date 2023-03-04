@@ -8,10 +8,6 @@ export interface User {
 	updatedAt: string;
 }
 
-export interface CreateUserPayload {
-	emailAddress: string;
-}
-
 export interface ApiSuccessResponse<T> {
 	data: T;
 }
@@ -29,6 +25,10 @@ export interface ApiErrorResponse {
 	errors: ApiError[];
 }
 
+type ApiResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse;
+
+export type DeleteUserResponse = ApiResponse<User>;
+
 const invalidJSONError: ApiErrorResponse = {
 	status: 500,
 	errors: [
@@ -41,36 +41,6 @@ const invalidJSONError: ApiErrorResponse = {
 		}
 	]
 };
-
-const serverError: ApiErrorResponse = {
-	status: 500,
-	errors: [
-		{
-			title: 'server error',
-			detail: 'Something unexpected happened',
-			source: {
-				pointer: '/response'
-			}
-		}
-	]
-};
-
-const requestFailedError: ApiErrorResponse = {
-	status: 502,
-	errors: [
-		{
-			title: 'request failed',
-			detail: 'the API did not respond',
-			source: {
-				pointer: '/response'
-			}
-		}
-	]
-};
-
-type ApiResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse;
-
-export type CreateUserResponse = ApiResponse<User>;
 
 export const isErrorResponseBody = (responseBody: any): responseBody is ApiErrorResponse => {
 	const ajv = new Ajv();
@@ -135,7 +105,7 @@ const isSuccessResponseBody = (responseBody: any): responseBody is ApiSuccessRes
 	return !!validateUserResponse(responseBody);
 };
 
-const ensureCorrectSuccessResponse = (responseBody: any): CreateUserResponse =>
+const ensureCorrectSuccessResponse = (responseBody: any): DeleteUserResponse =>
 	isSuccessResponseBody(responseBody)
 		? responseBody
 		: {
@@ -151,7 +121,7 @@ const ensureCorrectSuccessResponse = (responseBody: any): CreateUserResponse =>
 				]
 		  };
 
-const ensureCorrectErrorResponse = (responseBody: any): CreateUserResponse =>
+const ensureCorrectErrorResponse = (responseBody: any): DeleteUserResponse =>
 	isErrorResponseBody(responseBody)
 		? responseBody
 		: {
@@ -167,30 +137,47 @@ const ensureCorrectErrorResponse = (responseBody: any): CreateUserResponse =>
 				]
 		  };
 
-const postNewUser = ({ fetch }: any, payload: CreateUserPayload): Promise<Response> =>
-	fetch(`${API_BASE_URL}/api/v1/administration/users`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({ user: { email_address: payload.emailAddress } })
-	});
+const requestFailedError: ApiErrorResponse = {
+	status: 502,
+	errors: [
+		{
+			title: 'request failed',
+			detail: 'the API did not respond',
+			source: {
+				pointer: '/response'
+			}
+		}
+	]
+};
 
-const buildResponseFromExpectedBody = (response: Response): Promise<CreateUserResponse> =>
+const serverError: ApiErrorResponse = {
+	status: 500,
+	errors: [
+		{
+			title: 'server error',
+			detail: 'Something unexpected happened',
+			source: {
+				pointer: '/response'
+			}
+		}
+	]
+};
+
+const sendDeleteUserRequest = ({ fetch }: any, id: string): Promise<Response> =>
+	fetch(`${API_BASE_URL}/api/v1/administration/users/${id}`, { method: 'DELETE' });
+
+const buildResponseFromExpectedBody = (response: Response): Promise<DeleteUserResponse> =>
 	response.ok
 		? response.json().then(ensureCorrectSuccessResponse)
-		: response.status === 422
+		: response.status === 404
 		? response.json().then(ensureCorrectErrorResponse)
 		: Promise.resolve(serverError);
 
-export async function createUser(
-	{ fetch }: any,
-	payload: CreateUserPayload
-): Promise<CreateUserResponse> {
+export const deleteUser = async ({ fetch }: any, id: string): Promise<DeleteUserResponse> => {
 	try {
-		const response: Response = await postNewUser({ fetch }, payload);
+		const response: Response = await sendDeleteUserRequest({ fetch }, id);
 		return buildResponseFromExpectedBody(response).catch(() => invalidJSONError);
-	} catch {
+	} catch (e) {
 		return requestFailedError;
 	}
-}
+};
