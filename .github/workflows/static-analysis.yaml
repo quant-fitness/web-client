@@ -49,4 +49,6 @@ jobs:
           ./bin/rails db:create
           ./bin/rails db:migrate
           ./bin/rails server &
+        env:
+          DATABASE_URL: 'postgres://postgres:postgres@localhost:5432/quant-fitness-development'
       - run: npm test

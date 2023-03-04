@@ -6,7 +6,13 @@ import '@testing-library/jest-dom';
 
 describe('/internal/health-checks', () => {
 	it('shows a heading', () => {
-		render(Page);
+		render(Page, {
+			data: {
+				webClientCheck: 'responded-as-expected',
+				apiCheck: 'responded-as-expected',
+				databaseCheck: 'responded-as-expected'
+			}
+		});
 		expect(screen.getByRole('heading', { name: 'Internal - Health Checks' })).toBeInTheDocument();
 	});
 
