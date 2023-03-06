@@ -10,4 +10,5 @@ test('index page links to the health checks page', async ({ page }) => {
 	await page.getByRole('link', { name: 'Health Checks' }).click();
 	await page.getByText('Internal - Health Checks').isVisible();
 	await expect(page.getByText('Internal - Health Checks')).toBeVisible();
+	await expect(page.getByRole('link', { name: 'Health Checks' })).not.toBeVisible();
 });
