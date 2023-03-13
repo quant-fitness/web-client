@@ -1,5 +1,5 @@
 import type { HealthStatus } from '$lib/health-check-response';
-import { API_BASE_URL } from '$env/static/private';
+import { PUBLIC_API_BASE_URL } from '$env/static/public';
 
 const checkApiHealthBody = async (response: Response): Promise<HealthStatus> =>
 	response
@@ -9,7 +9,7 @@ const checkApiHealthBody = async (response: Response): Promise<HealthStatus> =>
 
 export const fetchApiHealth = async ({ fetch }: any) => {
 	try {
-		const healthCheckResponse = await fetch(`${API_BASE_URL}/api/v1/ping`);
+		const healthCheckResponse = await fetch(`${PUBLIC_API_BASE_URL}/api/v1/ping`);
 		return !healthCheckResponse.ok
 			? 'responded-with-an-error'
 			: checkApiHealthBody(healthCheckResponse);
