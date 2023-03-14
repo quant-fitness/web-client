@@ -12,17 +12,19 @@ type UserFixture = {
 };
 
 export const test = base.extend<UserFixture>({
-	user: async ({ playwright, baseURL }, use) => {
+	user: async ({ baseURL }, use) => {
 		const createUserRequest = await fetch(`${baseURL}/internal/users`, {
 			method: 'POST',
-			body: JSON.stringify({ user: { emailAddress: `some.email${Math.random()}@something.org` } })
+			body: JSON.stringify({
+				user: { password: 'password1234', emailAddress: `some.email${Math.random()}@something.org` }
+			})
 		});
 
 		const { data } = await createUserRequest.json();
 
 		use(data);
 
-		const deleteUserRequest = await fetch(`${baseURL}/internal/users/${data.id}`, {
+		await fetch(`${baseURL}/internal/users/${data.id}`, {
 			method: 'DELETE'
 		});
 	}

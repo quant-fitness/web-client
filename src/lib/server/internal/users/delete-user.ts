@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '$env/static/private';
+import { PUBLIC_API_BASE_URL } from '$env/static/public';
 import Ajv from 'ajv';
 
 export interface User {
@@ -164,7 +164,7 @@ const serverError: ApiErrorResponse = {
 };
 
 const sendDeleteUserRequest = ({ fetch }: any, id: string): Promise<Response> =>
-	fetch(`${API_BASE_URL}/api/v1/administration/users/${id}`, { method: 'DELETE' });
+	fetch(`${PUBLIC_API_BASE_URL}/api/v1/administration/users/${id}`, { method: 'DELETE' });
 
 const buildResponseFromExpectedBody = (response: Response): Promise<DeleteUserResponse> =>
 	response.ok

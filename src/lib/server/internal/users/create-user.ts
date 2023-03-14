@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '$env/static/private';
+import { PUBLIC_API_BASE_URL } from '$env/static/public';
 import Ajv from 'ajv';
 
 export interface User {
@@ -10,6 +10,7 @@ export interface User {
 
 export interface CreateUserPayload {
 	emailAddress: string;
+	password: string;
 }
 
 export interface ApiSuccessResponse<T> {
@@ -168,12 +169,14 @@ const ensureCorrectErrorResponse = (responseBody: any): CreateUserResponse =>
 		  };
 
 const postNewUser = ({ fetch }: any, payload: CreateUserPayload): Promise<Response> =>
-	fetch(`${API_BASE_URL}/api/v1/administration/users`, {
+	fetch(`${PUBLIC_API_BASE_URL}/api/v1/administration/users`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
 		},
-		body: JSON.stringify({ user: { email_address: payload.emailAddress } })
+		body: JSON.stringify({
+			user: { email_address: payload.emailAddress, password: payload.password }
+		})
 	});
 
 const buildResponseFromExpectedBody = (response: Response): Promise<CreateUserResponse> =>

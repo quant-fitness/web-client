@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '$env/static/private';
+import { PUBLIC_API_BASE_URL } from '$env/static/public';
 import Ajv from 'ajv';
 
 type ApiResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse;
@@ -148,7 +148,7 @@ const ensureCorrectSuccessResponse = (responseBody: any): ListUsersResponse =>
 export type ListUsersResponse = ApiErrorResponse | ApiResponse<User[]>;
 
 const fetchUsers = ({ fetch }: any): Promise<Response> =>
-	fetch(`${API_BASE_URL}/api/v1/administration/users`);
+	fetch(`${PUBLIC_API_BASE_URL}/api/v1/administration/users`);
 
 const buildResponseFromExpectedBody = (response: Response): Promise<ListUsersResponse> =>
 	response.ok ? response.json().then(ensureCorrectSuccessResponse) : Promise.resolve(serverError);

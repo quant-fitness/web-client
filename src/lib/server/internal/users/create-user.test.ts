@@ -11,10 +11,13 @@ import { describe, it, expect, vi } from 'vitest';
 describe('createUser', () => {
 	describe('when the backend does not respond', () => {
 		let response: CreateUserResponse;
-		let payload: CreateUserPayload;
 
 		beforeEach(async () => {
 			const fetch = vi.fn(() => Promise.reject());
+			const payload: CreateUserPayload = {
+				emailAddress: 'email@address.org',
+				password: 'password1234'
+			};
 			response = await createUser({ fetch }, payload);
 		});
 
@@ -38,7 +41,7 @@ describe('createUser', () => {
 			let payload: CreateUserPayload;
 
 			beforeEach(async () => {
-				payload = { emailAddress: 'something@email.org' };
+				payload = { emailAddress: 'something@email.org', password: 'password1234' };
 				const errorResponse: ApiErrorResponse = {
 					status: 422,
 					errors: [
@@ -75,7 +78,7 @@ describe('createUser', () => {
 			let payload: CreateUserPayload;
 
 			beforeEach(async () => {
-				payload = { emailAddress: 'something@email.org' };
+				payload = { emailAddress: 'something@email.org', password: 'password1234' };
 				const fetch = vi.fn(() =>
 					Promise.resolve({ ok: false, status: 422, json: () => Promise.reject() })
 				);
@@ -103,7 +106,7 @@ describe('createUser', () => {
 			let payload: CreateUserPayload;
 
 			beforeEach(async () => {
-				payload = { emailAddress: 'something@email.org' };
+				payload = { emailAddress: 'something@email.org', password: 'password1234' };
 
 				const fetch = vi.fn(() =>
 					Promise.resolve({ ok: false, status: 422, json: () => Promise.resolve({}) })
@@ -133,7 +136,7 @@ describe('createUser', () => {
 		let payload: CreateUserPayload;
 
 		beforeEach(async () => {
-			payload = { emailAddress: 'something@email.org' };
+			payload = { emailAddress: 'something@email.org', password: 'password1234' };
 			const errorResponse: ApiErrorResponse = {
 				status: 500,
 				errors: [
@@ -171,7 +174,7 @@ describe('createUser', () => {
 			let payload: CreateUserPayload;
 
 			beforeEach(async () => {
-				payload = { emailAddress: 'something@email.org' };
+				payload = { emailAddress: 'something@email.org', password: 'password1234' };
 				const fetch = vi.fn(() =>
 					Promise.resolve({ ok: true, status: 201, json: () => Promise.reject() })
 				);
@@ -199,7 +202,7 @@ describe('createUser', () => {
 			let payload: CreateUserPayload;
 
 			beforeEach(async () => {
-				payload = { emailAddress: 'something@email.org' };
+				payload = { emailAddress: 'something@email.org', password: 'password1234' };
 				const fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve({}) }));
 				response = await createUser({ fetch }, payload);
 			});
@@ -233,7 +236,7 @@ describe('createUser', () => {
 			let payload: CreateUserPayload;
 
 			beforeEach(async () => {
-				payload = { emailAddress: 'something@email.org' };
+				payload = { emailAddress: 'something@email.org', password: 'password1234' };
 
 				const fetch = vi.fn(() =>
 					Promise.resolve({ ok: true, json: () => Promise.resolve(createUserResponse) })
